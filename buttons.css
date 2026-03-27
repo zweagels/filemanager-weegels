@@ -1,0 +1,95 @@
+/* PROJECT: FILEMANAGER | V1.1.2 | MODULE: Styles | FILE: public/css/components/buttons.css */
+
+/* Basis Icoon Knop (Header & Sidebar) */
+.btn-icon {
+    background: transparent;
+    border: none;
+    padding: 10px;
+    border-radius: 12px;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-icon:hover {
+    background: rgba(37, 99, 235, 0.1);
+    color: var(--primary);
+    transform: translateY(-1px);
+}
+
+.theme-dark .btn-icon:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+/* Kleine Icoon Knop (Sidebar Headers) */
+.btn-icon-small {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s;
+    line-height: 1;
+}
+
+.btn-icon-small:hover {
+    color: var(--primary);
+    background: rgba(255,255,255,0.05);
+}
+
+/* Tekst Knop (Dropdowns) */
+.btn-text-small {
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.btn-text-small:hover {
+    text-decoration: underline;
+    background: rgba(37, 99, 235, 0.05);
+}
+
+/* Zen Mode Exit Knop (Floating) */
+.floating-zen-exit {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(30, 41, 59, 0.9);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.2);
+    cursor: pointer;
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    backdrop-filter: blur(5px);
+}
+
+.floating-zen-exit:hover {
+    background: var(--primary);
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 0 20px var(--primary);
+}
+
+.floating-zen-exit.hidden {
+    display: none;
+    pointer-events: none;
+    opacity: 0;
+    transform: scale(0.5);
+}

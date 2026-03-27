@@ -1,0 +1,63 @@
+/* PROJECT: FILEMANAGER | V1.1.2 | MODULE: Styles | FILE: public/css/variables.css */
+
+:root {
+    /* --- KLEURENPALET --- */
+    --primary: #2563EB;
+    --primary-gradient: linear-gradient(135deg, #2563EB 0%, #06b6d4 100%);
+    --error: #ef4444;
+    --warning: #f59e0b;
+    --success: #10b981;
+
+    /* --- SIDEBAR (Altijd Dark) --- */
+    --sidebar-bg: #0f172a;
+    --sidebar-text: #94a3b8;
+    --sidebar-text-active: #ffffff;
+    --sidebar-hover: rgba(255, 255, 255, 0.05);
+    
+    /* --- LIGHT MODE (Default) --- */
+    --bg-main: #F8FAFC;       /* Zeer lichte grijs/blauw tint ipv hard wit */
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    
+    /* Header & Dropdowns (Light) */
+    --bg-header: rgba(255, 255, 255, 0.85);
+    --bg-dropdown: #ffffff;
+    --border-dropdown: rgba(0, 0, 0, 0.08);
+    --shadow-dropdown: 0 10px 40px -10px rgba(0, 0, 0, 0.15);
+    
+    /* Toasts (Light) */
+    --bg-toast: #ffffff;
+    --text-toast: #1e293b;
+    --border-toast: rgba(0, 0, 0, 0.05);
+
+    /* --- NIEUW VOOR FASE 1: SOLID SURFACES & APPLE SHADOWS --- */
+    --bg-surface: #ffffff; /* Solide ondoorzichtige achtergrond voor modals */
+    --apple-shadow: 0 4px 6px rgba(0,0,0,0.05), 0 20px 40px rgba(0,0,0,0.12); /* Zachte gelaagde schaduw */
+
+    /* Layout */
+    --header-height: 64px;
+    --sidebar-width: 260px;
+    --glass-blur: blur(20px);
+}
+
+/* --- DARK MODE --- */
+.theme-dark {
+    --bg-main: #020617;
+    --text-main: #f1f5f9;
+    --text-muted: #94a3b8;
+
+    /* Header & Dropdowns (Dark) */
+    --bg-header: rgba(15, 23, 42, 0.85);
+    --bg-dropdown: #1e293b;
+    --border-dropdown: rgba(255, 255, 255, 0.1);
+    --shadow-dropdown: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+
+    /* Toasts (Dark) */
+    --bg-toast: #1e293b;
+    --text-toast: #f8fafc;
+    --border-toast: rgba(255, 255, 255, 0.1);
+
+    /* --- NIEUW VOOR FASE 1 --- */
+    --bg-surface: #1e293b; /* Solide donkere achtergrond */
+    --apple-shadow: 0 4px 6px rgba(0,0,0,0.2), 0 20px 40px rgba(0,0,0,0.4);
+}

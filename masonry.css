@@ -1,0 +1,70 @@
+/* PROJECT: FILEMANAGER | V1.1.2 | MODULE: Views | FILE: public/css/views/masonry.css */
+
+.masonry-wrapper {
+    /* De Pinterest engine: CSS Columns */
+    column-width: var(--zoom-level, 200px);
+    column-gap: 20px;
+    padding: 10px;
+    width: 100%;
+}
+
+.masonry-wrapper .grid-tile {
+    /* Zorg dat een tegel nooit over 2 kolommen heen breekt */
+    break-inside: avoid;
+    page-break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+    
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px; 
+    width: 100%;
+    
+    /* DIT WAS DE BOOSDOENER: 
+       We overschrijven hier de keiharde 'aspect-ratio: 1/1.1' uit je grid.css! */
+    aspect-ratio: auto !important;
+    height: auto !important;
+    min-height: 120px;
+}
+
+.masonry-wrapper .grid-tile .tile-visual {
+    /* Laat de container meegroeien met de afbeelding in plaats van fixed 50% */
+    height: auto !important;
+    min-height: 60px;
+    flex: 1; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.masonry-wrapper .grid-tile .tile-visual img {
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important; /* Vloeibare hoogte -> het échte Pinterest effect! */
+    max-height: 800px; /* Veiligheidslimiet voor extreem lange screenshots */
+    object-fit: cover !important; 
+    border-radius: 6px;
+    display: block;
+}
+
+/* Map- en bestandiconen in masonry view niet per ongeluk uitrekken */
+.masonry-wrapper .grid-tile.type-folder .tile-visual svg,
+.masonry-wrapper .grid-tile .tile-visual > div > svg {
+    max-width: 80px;
+    height: auto;
+}
+
+/* =========================================================
+   --- FASE 5: MOBIELE OPTIMALISATIES (MASONRY) --- 
+   ========================================================= */
+@media (max-width: 768px) {
+    .masonry-wrapper {
+        column-width: 130px; /* Kleinere Pinterest-kolommen op mobiel */
+        column-gap: 12px;
+        padding: 8px;
+    }
+    
+    .masonry-wrapper .grid-tile {
+        margin-bottom: 12px;
+    }
+}

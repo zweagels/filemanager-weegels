@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - FileManager</title>
+    
+    <link rel="stylesheet" href="public/css/variables.css">
+    <link rel="stylesheet" href="public/css/reset.css">
+    <link rel="stylesheet" href="public/css/layout/structure.css">
+    <link rel="stylesheet" href="public/css/layout/sidebar.css">
+    <link rel="stylesheet" href="public/css/layout/header.css">
+    <link rel="stylesheet" href="public/css/layout/toolbar.css">
+    <link rel="stylesheet" href="public/css/components/buttons.css">
+    <link rel="stylesheet" href="public/css/components/toast.css">
+    <link rel="stylesheet" href="public/css/components/modals.css">
+    <link rel="stylesheet" href="public/css/components/properties.css">
+    <link rel="stylesheet" href="public/css/components/interaction.css">
+    <link rel="stylesheet" href="public/css/components/upload.css"> 
+    <link rel="stylesheet" href="public/css/views/grid.css">
+    <link rel="stylesheet" href="public/css/views/list.css">
+    <link rel="stylesheet" href="public/css/views/masonry.css">
+    <link rel="stylesheet" href="public/css/components/contextmenu.css">
+    <link rel="stylesheet" href="public/css/views/dashboard.css">
+    <link rel="stylesheet" href="public/css/views/settings.css">
+    
+    <link rel="stylesheet" href="public/css/views/slideshow-player.css">
+</head>
+<body>
+    
+    <div class="noise-overlay"></div>
+
+    <div class="app-container">
+        
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-shield-small">FM</div>
+                <span class="brand-name">FileManager</span>
+            </div>
+            <div class="sidebar-content custom-scrollbar">
+                <div class="nav-group">
+                    
+                    <div class="nav-item item-blue" data-path="dashboard" style="position: relative;">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                        <span class="label">Dashboard</span>
+                    </div>
+
+                    <div class="nav-item active item-blue nav-history-parent" data-path="/" style="position: relative;">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                        <span class="label">Mijn Bestanden</span>
+                        <div class="nav-chevron" style="position: absolute; right: 12px; opacity: 0.5; transition: transform 0.2s; cursor: pointer; display: flex; align-items: center; padding: 4px;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </div>
+                    </div>
+                    <div id="sidebar-history-list" class="nav-subgroup hidden" style="padding-left: 20px; display: none;">
+                        <div class="nav-item placeholder-item" style="pointer-events:none;"><span class="label" style="opacity:0.5; font-style:italic; font-size:0.85rem;">Geen geschiedenis</span></div>
+                    </div>
+
+                    <div class="nav-item item-purple nav-recent-parent" data-action="recent" style="position: relative;">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        <span class="label">Recent</span>
+                        <div class="nav-chevron" id="chevron-recent" style="position: absolute; right: 12px; opacity: 0.5; transition: transform 0.2s; cursor: pointer; display: flex; align-items: center; padding: 4px;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </div>
+                    </div>
+                    <div id="sidebar-recent-list" class="nav-subgroup hidden" style="padding-left: 20px; display: none;">
+                        <div class="nav-item placeholder-item" style="pointer-events:none;"><span class="label" style="opacity:0.5; font-style:italic; font-size:0.85rem;">Laden...</span></div>
+                    </div>
+
+                    <div class="nav-item item-gold" data-action="favorites">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 21.78 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2.22 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <span class="label">Favorieten</span>
+                    </div>
+
+                    <div class="nav-item item-cyan" data-action="shares">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                        <span class="label">Gedeelde Links</span>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="nav-group accordion item-pink" id="group-albums">
+                    <div class="accordion-header">
+                        <span class="title">ALBUMS</span>
+                        <button class="btn-icon-small" title="Nieuw Album">+</button>
+                    </div>
+                    <div class="accordion-content" id="sidebar-album-list">
+                        <div class="nav-item placeholder-item">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                            <span class="label">Laden...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="nav-group accordion item-teal" id="group-tags">
+                    <div class="accordion-header">
+                        <span class="title">TAGS</span>
+                        <button class="btn-icon-small" id="btn-add-tag" title="Nieuwe Tag">+</button>
+                    </div>
+                    <div class="accordion-content tag-cloud" id="sidebar-tag-list"></div>
+                    <div id="inline-tag-input" class="hidden" style="padding: 0 16px 10px;">
+                        <input type="text" placeholder="Tag naam..." class="input-tiny" style="width:100%; padding:4px; border-radius:4px; border:1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.2); color:white;">
+                    </div>
+                </div>
+
+                <div style="flex: 1;"></div> 
+                <div class="divider"></div>
+
+                <div class="nav-group">
+                    <div class="nav-item item-red" data-action="trash">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        <span class="label">Prullenbak</span>
+                    </div>
+                </div>
+            </div>
+            <div class="sidebar-footer">
+                <div class="storage-meter">
+                    <div class="meter-labels"><span>Opslag</span><span id="storage-text">Berekenen...</span></div>
+                    <div class="meter-bar"><div class="meter-fill" style="width: 0%"></div></div>
+                </div>
+            </div>
+        </aside>
+
+        <div id="resizer" class="sidebar-resizer" title="Sleep om te vergroten"></div>
+
+        <main class="main-content">
+            
+            <header id="main-header" class="header">
+                <div class="header-left">
+                    <button id="btn-toggle-sidebar" class="btn-icon" title="Toggle Sidebar">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                    </button>
+                    <nav class="breadcrumbs" id="breadcrumbs">
+                        <span class="crumb root">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom:-2px;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                        </span>
+                    </nav>
+                </div>
+
+                <div class="header-center">
+                    <div class="search-bar" style="position:relative; display:flex; align-items:center;">
+                        <span class="search-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
+                        <input type="text" id="spotlight-search" placeholder="Zoek op naam, of typ '.pdf'..." style="width: 100%; padding-right: 30px;">
+                        <span id="search-clear" class="kbd-shortcut" style="display:none; cursor:pointer; pointer-events:auto; position:absolute; right:8px;">&times;</span>
+                    </div>
+                </div>
+
+                <div class="header-right" style="display: flex; gap: 8px; align-items: center;">
+                    <button id="btn-zen-mode" class="btn-icon" title="Zen Mode">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    </button>
+                    <button id="btn-theme-toggle" class="btn-icon" title="Wissel Thema">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    </button>
+                    
+                    <div class="notification-wrapper" style="position:relative;">
+                        <button id="btn-notifications" class="btn-icon" title="Meldingen">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                            <span class="badge-dot hidden" style="position:absolute; top:2px; right:2px; width:8px; height:8px; background:var(--error); border-radius:50%;"></span>
+                        </button>
+                        <div class="dropdown-menu dropdown-right" id="dropdown-notifications" style="width: 320px; top:100%; right:0; position:absolute; z-index: 1000; display:none;">
+                            <div class="dropdown-header" style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid var(--border-dropdown); font-weight:bold;">
+                                <span>Meldingen</span> 
+                                <button class="btn-text-small" id="btn-clear-notifs" style="background:none; border:none; color:var(--primary); cursor:pointer;">Wissen</button>
+                            </div>
+                            <div id="notif-list" style="max-height: 300px; overflow-y: auto; padding: 8px;">
+                                <div style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 0.9rem;">Geen nieuwe meldingen</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="user-menu-wrapper" style="position:relative;">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2364748b'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E" id="header-avatar" class="avatar-small" alt="User" style="cursor:pointer; width:36px; height:36px; border-radius:50%;">
+                        <div class="dropdown-menu dropdown-right" id="dropdown-profile" style="width: 200px; top:100%; right:0; position:absolute; z-index: 1000; display:none;">
+                            <div class="dropdown-header" style="padding:10px; font-weight:bold; border-bottom:1px solid var(--border-dropdown);">Mijn Account</div>
+                            <div class="dropdown-item" style="padding:10px; cursor:pointer;">Instellingen</div>
+                            <div class="dropdown-item" style="padding:10px; cursor:pointer;">Profiel bewerken</div>
+                            <div class="dropdown-divider" style="border-bottom:1px solid var(--border-dropdown); margin:4px 0;"></div>
+                            <div class="dropdown-item danger" style="padding:10px; cursor:pointer; color:var(--error);" onclick="window.location.href='/api/logout'">Uitloggen</div>
+                        </div>
+                    </div>
+
+                </div>
+            </header>
+
+            <div class="toolbar" id="main-toolbar">
+                <div class="toolbar-left" style="position: relative;">
+                    <button id="btn-add-new" class="btn-sm btn-primary">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        Toevoegen
+                    </button>
+                    
+                    <div id="dropdown-add-new" class="dropdown-menu" style="top: 100%; left: 0; margin-top: 8px; width: 200px;">
+                        <div class="dropdown-item" id="btn-new-folder" style="display: flex; align-items: center; gap: 8px;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path><line x1="12" y1="11" x2="12" y2="17"></line><line x1="9" y1="14" x2="15" y2="14"></line></svg>
+                            Nieuwe Map
+                        </div>
+                        <div style="border-bottom: 1px solid var(--border-dropdown); margin: 4px 0;"></div>
+                        <div class="dropdown-item" id="btn-upload" style="display: flex; align-items: center; gap: 8px;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                            Bestand Uploaden
+                        </div>
+                        <div class="dropdown-item" id="btn-upload-folder" style="display: flex; align-items: center; gap: 8px;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path><path d="M12 17v-6"></path><path d="M9 14l3-3 3 3"></path></svg>
+                            Map Uploaden
+                        </div>
+                    </div>
+
+                    <input type="file" id="mock-upload-input" multiple style="display:none;">
+                    <input type="file" id="mock-folder-input" webkitdirectory directory multiple style="display:none;">
+                </div>
+                
+                <div class="toolbar-center">
+                    <div class="filter-wrapper">
+                        <button id="btn-filter-toggle" class="btn-filter-toggle" title="Sorteer & Filter (Toets F)">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+                            <span id="filter-active-label">Weergave & Filters</span>
+                            <span id="filter-badge" class="filter-badge"></span>
+                        </button>
+
+                        <div id="power-menu" class="power-menu">
+                            <div>
+                                <div class="filter-section-title">Sorteer op</div>
+                                <div class="filter-grid-2">
+                                    <label class="premium-filter-btn color-blue"><input type="radio" name="sort_field" value="name" checked><div class="filter-content"><span class="filter-left-wrapper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg> Naam</span></div></label>
+                                    <label class="premium-filter-btn color-blue"><input type="radio" name="sort_field" value="date_created"><div class="filter-content"><span class="filter-left-wrapper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> Aangemaakt</span></div></label>
+                                    <label class="premium-filter-btn color-blue"><input type="radio" name="sort_field" value="date_modified"><div class="filter-content"><span class="filter-left-wrapper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M2.13 15.57a10 10 0 1 0 1.94-8.08L2.5 12"></path></svg> Gewijzigd</span></div></label>
+                                    <label class="premium-filter-btn color-blue"><input type="radio" name="sort_field" value="size"><div class="filter-content"><span class="filter-left-wrapper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="12" x2="2" y2="12"></line><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg> Grootte</span></div></label>
+                                    <label class="premium-filter-btn color-blue"><input type="radio" name="sort_field" value="type"><div class="filter-content"><span class="filter-left-wrapper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg> Extensie</span></div></label>
+                                    <label class="premium-filter-btn color-blue"><input type="radio" name="sort_field" value="color"><div class="filter-content"><span class="filter-left-wrapper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg> Kleur</span></div></label>
+                                    
+                                    <label class="premium-filter-btn color-blue" style="grid-column: span 2; margin-top: 8px;"><input type="radio" name="sort_order" value="asc" checked><div class="filter-content"><span class="filter-left-wrapper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg> Oplopend (A-Z / Oud-Nieuw)</span></div></label>
+                                    <label class="premium-filter-btn color-blue" style="grid-column: span 2;"><input type="radio" name="sort_order" value="desc"><div class="filter-content"><span class="filter-left-wrapper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg> Aflopend (Z-A / Nieuw-Oud)</span></div></label>
+                                </div>
+
+                                <div class="filter-section-title" style="margin-top: 24px;">Groeperen Weergave</div>
+                                <div class="filter-grid-2">
+                                    <label class="premium-filter-btn color-gray"><input type="radio" name="group_by" value="none" checked><div class="filter-content"><span class="filter-left-wrapper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line></svg> Geen</span></div></label>
+                                    <label class="premium-filter-btn color-gray"><input type="radio" name="group_by" value="type"><div class="filter-content"><span class="filter-left-wrapper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg> Bestandstype</span></div></label>
+                                    <label class="premium-filter-btn color-gray"><input type="radio" name="group_by" value="date"><div class="filter-content"><span class="filter-left-wrapper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> Datum</span></div></label>
+                                    <label class="premium-filter-btn color-gray"><input type="radio" name="group_by" value="size"><div class="filter-content"><span class="filter-left-wrapper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 22 22 22"></polygon></svg> Grootte</span></div></label>
+                                    <label class="premium-filter-btn color-gray" style="grid-column: span 2;"><input type="radio" name="group_by" value="alpha"><div class="filter-content"><span class="filter-left-wrapper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg> Alfabetisch (A, B, C...)</span></div></label>
+                                </div>
+                            </div>
+                            
+                            <div class="menu-divider-vertical"></div>
+
+                            <div>
+                                <div class="filter-grid-3">
+                                    <div>
+                                        <div class="filter-section-title">Hoofdcategorie</div>
+                                        <div class="filter-grid-1">
+                                            <label class="premium-filter-btn color-gray"><input type="radio" name="filter_cat" value="alles" checked><div class="filter-content"><span class="filter-left-wrapper">Alles Tonen</span></div></label>
+                                            <label class="premium-filter-btn color-blue"><input type="radio" name="filter_cat" value="doc"><div class="filter-content"><span class="filter-left-wrapper">Documenten</span></div></label>
+                                            <label class="premium-filter-btn color-img"><input type="radio" name="filter_cat" value="image"><div class="filter-content"><span class="filter-left-wrapper">Afbeeldingen</span></div></label>
+                                            <label class="premium-filter-btn color-purple"><input type="radio" name="filter_cat" value="video"><div class="filter-content"><span class="filter-left-wrapper">Media</span></div></label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="filter-section-title">Datum-bereik</div>
+                                        <div class="filter-grid-1">
+                                            <label class="premium-filter-btn color-gray"><input type="radio" name="filter_date" value="all" checked><div class="filter-content"><span class="filter-left-wrapper">Alle data</span></div></label>
+                                            <label class="premium-filter-btn color-orange"><input type="radio" name="filter_date" value="today"><div class="filter-content"><span class="filter-left-wrapper">Vandaag</span></div></label>
+                                            <label class="premium-filter-btn color-orange"><input type="radio" name="filter_date" value="week"><div class="filter-content"><span class="filter-left-wrapper">Afgelopen 7 dagen</span></div></label>
+                                            <label class="premium-filter-btn color-orange"><input type="radio" name="filter_date" value="month"><div class="filter-content"><span class="filter-left-wrapper">Deze maand</span></div></label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="filter-section-title">Bestandsgrootte</div>
+                                        <div class="filter-grid-1">
+                                            <label class="premium-filter-btn color-gray"><input type="radio" name="filter_size" value="all" checked><div class="filter-content"><span class="filter-left-wrapper">Alle groottes</span></div></label>
+                                            <label class="premium-filter-btn color-green"><input type="radio" name="filter_size" value="small"><div class="filter-content"><span class="filter-left-wrapper">Klein (&lt; 1MB)</span></div></label>
+                                            <label class="premium-filter-btn color-green"><input type="radio" name="filter_size" value="medium"><div class="filter-content"><span class="filter-left-wrapper">Middel (1 - 50MB)</span></div></label>
+                                            <label class="premium-filter-btn color-green"><input type="radio" name="filter_size" value="large"><div class="filter-content"><span class="filter-left-wrapper">Groot (&gt; 50MB)</span></div></label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="filter-section-title" style="margin-top: 10px;">Top 15 Extensies</div>
+                                <div class="filter-grid-3">
+                                    <label class="premium-filter-btn color-pdf"><input type="checkbox" name="filter_ext" value="pdf"><div class="filter-content"><span class="filter-left-wrapper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg> .pdf</span><span class="filter-count" data-count="pdf">0</span></div></label>
+                                    <label class="premium-filter-btn color-blue"><input type="checkbox" name="filter_ext" value="doc,docx"><div class="filter-content"><span class="filter-left-wrapper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg> .docx</span><span class="filter-count" data-count="doc">0</span></div></label>
+                                    <label class="premium-filter-btn color-green"><input type="checkbox" name="filter_ext" value="xls,xlsx"><div class="filter-content"><span class="filter-left-wrapper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg> .xlsx</span><span class="filter-count" data-count="xls">0</span></div></label>
+                                    
+                                    <label class="premium-filter-btn color-orange"><input type="checkbox" name="filter_ext" value="ppt,pptx"><div class="filter-content"><span class="filter-left-wrapper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line></svg> .pptx</span><span class="filter-count" data-count="ppt">0</span></div></label>
+                                    <label class="premium-filter-btn color-gray"><input type="checkbox" name="filter_ext" value="txt"><div class="filter-content"><span class="filter-left-wrapper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="21" y1="10" x2="3" y2="10"></line><line x1="21" y1="14" x2="3" y2="14"></line></svg> .txt</span><span class="filter-count" data-count="txt">0</span></div></label>
+                                    <label class="premium-filter-btn color-green"><input type="checkbox" name="filter_ext" value="csv"><div class="filter-content"><span class="filter-left-wrapper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line></svg> .csv</span><span class="filter-count" data-count="csv">0</span></div></label>
+                                    
+                                    <label class="premium-filter-btn color-yellow"><input type="checkbox" name="filter_ext" value="zip,rar,7z"><div class="filter-content"><span class="filter-left-wrapper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg> .zip</span><span class="filter-count" data-count="zip">0</span></div></label>
+                                    <label class="premium-filter-btn color-purple"><input type="checkbox" name="filter_ext" value="mp4,mov,avi"><div class="filter-content"><span class="filter-left-wrapper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect></svg> .mp4</span><span class="filter-count" data-count="mp4">0</span></div></label>
+                                    <label class="premium-filter-btn color-cyan"><input type="checkbox" name="filter_ext" value="mp3,wav,ogg"><div class="filter-content"><span class="filter-left-wrapper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"></path></svg> .mp3</span><span class="filter-count" data-count="mp3">0</span></div></label>
+
+                                    <label class="premium-filter-btn color-img"><input type="checkbox" name="filter_ext" value="jpg,jpeg"><div class="filter-content"><span class="filter-left-wrapper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg> .jpg</span><span class="filter-count" data-count="jpg">0</span></div></label>
+                                    <label class="premium-filter-btn color-img"><input type="checkbox" name="filter_ext" value="png"><div class="filter-content"><span class="filter-left-wrapper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg> .png</span><span class="filter-count" data-count="png">0</span></div></label>
+                                    <label class="premium-filter-btn color-orange"><input type="checkbox" name="filter_ext" value="svg"><div class="filter-content"><span class="filter-left-wrapper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon></svg> .svg</span><span class="filter-count" data-count="svg">0</span></div></label>
+
+                                    <label class="premium-filter-btn color-blue"><input type="checkbox" name="filter_ext" value="psd"><div class="filter-content"><span class="filter-left-wrapper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"></path></svg> .psd</span><span class="filter-count" data-count="psd">0</span></div></label>
+                                    <label class="premium-filter-btn color-orange"><input type="checkbox" name="filter_ext" value="ai"><div class="filter-content"><span class="filter-left-wrapper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"></path></svg> .ai</span><span class="filter-count" data-count="ai">0</span></div></label>
+                                    <label class="premium-filter-btn color-gray"><input type="checkbox" name="filter_ext" value="json,xml"><div class="filter-content"><span class="filter-left-wrapper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline></svg> .json</span><span class="filter-count" data-count="json">0</span></div></label>
+                                </div>
+                            </div>
+                            
+                            <div class="power-menu-footer">
+                                <button id="btn-clear-filters" class="btn-sm btn-secondary" style="color: var(--error);">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                    Filters & Sortering Wissen
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="active-filters-container" class="active-filters-container"></div>
+                </div>
+                
+                <div class="toolbar-right">
+                    <div class="zoom-control">
+                        <button id="btn-zoom-out" class="btn-icon-tiny"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+                        <input type="range" id="zoom-slider" min="100" max="400" value="150">
+                        <button id="btn-zoom-in" class="btn-icon-tiny"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+                    </div>
+                    <div class="toolbar-divider"></div>
+                    <div class="view-toggle">
+                        <button id="btn-view-grid" class="btn-icon active" title="Grid View"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></button>
+                        <button id="btn-view-masonry" class="btn-icon" title="Pinterest View"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="13"></rect><rect x="14" y="18" width="7" height="3"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></button>
+                        <button id="btn-view-list" class="btn-icon" title="Lijst View"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg></button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="file-view" class="file-view-container">
+                <div class="empty-state-placeholder"><h2>Laden...</h2></div>
+            </div>
+
+            <div id="properties-panel" class="properties-panel">
+                <div class="prop-header">
+                    <span class="prop-title">Eigenschappen</span>
+                    <button class="prop-close" id="btn-close-props"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                </div>
+                <div class="prop-content custom-scrollbar">
+                    <div class="prop-preview" id="prop-preview-icon"></div>
+                    <div class="prop-group"><label class="prop-label">Naam (Klik om te wijzigen)</label><input type="text" id="prop-name" class="prop-input"></div>
+                    <div class="prop-group"><label class="prop-label">Type</label><div class="prop-value" id="prop-type">--</div></div>
+                    <div class="prop-group"><label class="prop-label">Grootte</label><div class="prop-value" id="prop-size">--</div></div>
+                    <div class="prop-group"><label class="prop-label">Aangemaakt op</label><div class="prop-value" id="prop-date">--</div></div>
+                    <div class="prop-group">
+                        <label class="prop-label">Tags</label>
+                        <div class="prop-tags-container" id="prop-tags-container"></div>
+                        <input type="text" id="prop-tag-input" class="prop-tag-input" placeholder="Typ tag en druk op Enter...">
+                    </div>
+                    <div class="prop-group">
+                        <label class="prop-label">Kleur Markering</label>
+                        <div class="prop-color-picker" id="prop-color-picker">
+                            <div class="prop-color-swatch active" data-color="none" style="background: transparent; border-color: var(--border-dropdown);" title="Geen kleur"></div>
+                            <div class="prop-color-swatch" data-color="#ef4444" style="background: #ef4444;" title="Rood"></div>
+                            <div class="prop-color-swatch" data-color="#f97316" style="background: #f97316;" title="Oranje"></div>
+                            <div class="prop-color-swatch" data-color="#eab308" style="background: #eab308;" title="Geel"></div>
+                            <div class="prop-color-swatch" data-color="#22c55e" style="background: #22c55e;" title="Groen"></div>
+                            <div class="prop-color-swatch" data-color="#3b82f6" style="background: #3b82f6;" title="Blauw"></div>
+                            <div class="prop-color-swatch" data-color="#a855f7" style="background: #a855f7;" title="Paars"></div>
+                            <div class="prop-color-swatch" data-color="#ec4899" style="background: #ec4899;" title="Roze"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <div id="upload-panel" class="upload-panel">
+            <div class="upload-header" onclick="this.parentElement.classList.toggle('minimized')">
+                <span class="upload-title">Uploaden...</span>
+                <div class="upload-header-controls">
+                    <button type="button" onclick="event.stopPropagation(); document.getElementById('upload-panel').classList.remove('visible');">&times;</button>
+                </div>
+            </div>
+            <div class="upload-total-progress"><div class="progress-fill"></div></div>
+            <div class="upload-body custom-scrollbar">
+                <div class="upload-meta">
+                    <span class="upload-eta"></span>
+                    <span class="upload-speed"></span>
+                    <label class="compress-toggle" title="Bespaar opslag door afbeeldingen te verkleinen voor uploaden">
+                        <input type="checkbox" id="chk-compress" checked> Compressie (JPG)
+                    </label>
+                </div>
+                <div id="upload-queue-list" class="upload-list"></div>
+            </div>
+        </div>
+
+        <div id="toast-container" class="toast-container"></div>
+        <div id="modal-root"></div>
+
+    </div>
+
+    <script src="public/js/core/EventBus.js"></script>
+    <script src="public/js/core/ModalService.js"></script>
+    <script src="public/js/ui/Hotkeys.js"></script>
+    <script src="public/js/core/ThemeManager.js"></script>
+    <script src="public/js/ui/ZenMode.js"></script>
+    <script src="public/js/ui/Search.js"></script>
+    <script src="public/js/ui/Lightbox.js"></script>
+    <script src="public/js/ui/Editor.js"></script>
+    <script src="public/js/ui/ConverterUI.js"></script>
+    <script src="public/js/utils/InputValidator.js"></script> 
+    <script src="public/js/utils/ImageLoader.js"></script> 
+    <script src="public/js/api/FileApi.js"></script> 
+    <script src="public/js/views/EmptyStates.js"></script> 
+    <script src="public/js/views/TileBuilder.js"></script> 
+    <script src="public/js/views/ListBuilder.js"></script> 
+    <script src="public/js/modules/admin/Settings.js"></script>
+    <script src="public/js/modules/admin/AdminUI.js"></script>
+    <script src="public/js/modules/files/ViewState.js"></script>
+    <script src="public/js/modules/files/FilterEngine.js"></script>
+    <script src="public/js/modules/files/VirtualScroll.js"></script> 
+    <script src="public/js/modules/files/ColumnResizer.js"></script> 
+    <script src="public/js/modules/files/ItemActions.js"></script>
+    <script src="public/js/modules/files/MasonryLayout.js"></script>
+    <script src="public/js/modules/files/Render.js"></script> 
+    <script src="public/js/modules/files/Trash.js"></script>
+    <script src="public/js/modules/interaction/Selection.js"></script>
+    <script src="public/js/modules/interaction/DragDrop.js"></script>
+    <script src="public/js/modules/upload/ChunkHandler.js"></script>
+    <script src="public/js/modules/upload/Uploader.js"></script>
+    <script src="public/js/modules/organization/ColorPicker.js"></script>
+    <script src="public/js/modules/organization/IconPicker.js"></script>
+    <script src="public/js/modules/organization/Tags.js"></script>
+    <script src="public/js/modules/organization/Albums.js"></script>
+    
+    <script src="public/js/modules/share/ShareModal.js"></script>
+    <script src="public/js/modules/share/Shares.js"></script>
+    
+    <script src="public/js/ui/Sidebar.js"></script>
+    <script src="public/js/ui/SidebarHistory.js"></script>
+    <script src="public/js/ui/Header.js"></script>
+    <script src="public/js/ui/NotificationCenter.js"></script>
+    <script src="public/js/ui/Toolbar.js"></script>
+    <script src="public/js/ui/PropertiesPanel.js"></script>
+    <script src="public/js/ui/ContextMenu.js"></script>
+    <script src="public/js/modules/admin/Widgets.js"></script>
+    <script src="public/js/modules/admin/Dashboard.js"></script>
+    
+    <script src="public/js/modules/slideshow/SlideshowOverview.js"></script>
+    <script src="public/js/modules/slideshow/SlideshowWizard.js"></script>
+    
+    <script src="public/js/modules/slideshow/EditorCore.js"></script>
+    <script src="public/js/modules/slideshow/EditorAPI.js"></script>
+    <script src="public/js/modules/slideshow/EditorHistory.js"></script>
+    <script src="public/js/modules/slideshow/EditorUI.js"></script>
+	<script src="public/js/modules/slideshow/EditorOverlayUI.js"></script>
+    <script src="public/js/modules/slideshow/EditorProperties.js"></script>
+    <script src="public/js/modules/slideshow/EditorLinkModal.js"></script>
+	<script src="public/js/modules/slideshow/EditorCropperUI.js"></script>
+    
+    <script src="public/js/modules/slideshow/EditorLayoutManager.js"></script>
+    <script src="public/js/modules/slideshow/EditorLayoutRibbon.js"></script>
+    
+    <script src="public/js/modules/slideshow/SlideDragDrop.js"></script>
+    <script src="public/js/modules/slideshow/VideoTrimmerUI.js"></script>
+    <script src="public/js/modules/slideshow/PlayerCore.js"></script>
+    <script src="public/js/modules/slideshow/PlayerLayouts.js"></script>
+    
+    <script src="public/js/app.js"></script>
+</body>
+</html>

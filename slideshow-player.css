@@ -1,0 +1,267 @@
+/* PROJECT: FILEMANAGER | V1.1.2 | MODULE: Slideshow | FILE: public/css/views/slideshow-player.css */
+
+/* Reset & Hardware Acceleration Base */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* FIX: Muis is standaard zichtbaar, tenzij de body de specifieke TV class heeft */
+html, body { 
+    margin: 0; padding: 0; width: 100vw; height: 100vh; height: 100dvh; 
+    font-family: 'Inter', sans-serif; 
+}
+
+/* TV Specifieke styling (Toegepast op <body class="ss-tv-body"> in player.html) */
+body.ss-tv-body {
+    background-color: #000; 
+    color: #fff; 
+    overflow: hidden; 
+    cursor: none; /* Cursor NU ALLEEN verborgen op de TV speler! */
+    user-select: none; 
+    -webkit-user-select: none;
+}
+
+/* Loader */
+.ss-tv-loader { position: fixed; inset: 0; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999999; transition: opacity 0.5s ease; }
+.ss-tv-spinner { width: 60px; height: 60px; border: 4px solid rgba(255,255,255,0.1); border-top-color: #3b82f6; border-radius: 50%; animation: tvSpin 1s linear infinite; margin-bottom: 20px; }
+.ss-tv-status { font-size: 1.2rem; font-weight: 600; color: rgba(255,255,255,0.6); letter-spacing: 2px; text-transform: uppercase; }
+@keyframes tvSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/* Error Scherm */
+.ss-tv-error { position: fixed; inset: 0; background: #0f172a; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999999; text-align: center; padding: 40px; }
+.ss-tv-error h1 { font-size: 3rem; margin: 20px 0 10px; color: #f8fafc; }
+.ss-tv-error p { font-size: 1.5rem; color: #94a3b8; margin-bottom: 30px; }
+.ss-tv-retry-btn { background: #3b82f6; color: white; border: none; padding: 16px 32px; font-size: 1.2rem; font-weight: 800; border-radius: 12px; cursor: pointer; box-shadow: 0 10px 20px rgba(59, 130, 246, 0.4); }
+
+/* Hoofd Containers */
+.ss-tv-container { position: relative; width: 100%; height: 100%; transition: opacity 1s ease; }
+.ss-tv-bg { position: absolute; inset: 0; z-index: 1; background: #000; overflow: hidden; }
+/* FASE 4 FIX: GPU Acceleratie via will-change */
+.ss-tv-media-layer { position: absolute; inset: 0; z-index: 2; overflow: hidden; perspective: 1000px; will-change: transform, opacity; }
+.ss-tv-overlay { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+.ss-tv-interaction-shield { position: absolute; inset: 0; z-index: 4; cursor: default; }
+
+/* Audio Start Fallback */
+.ss-tv-audio-start { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 9999999; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: 0.3s; pointer-events: auto; }
+.ss-tv-audio-start.visible { opacity: 1; visibility: visible; }
+.ss-tv-audio-start button { background: #10b981; color: white; border: none; padding: 24px 48px; border-radius: 100px; font-size: 1.8rem; font-weight: 800; display: flex; align-items: center; gap: 16px; cursor: pointer; box-shadow: 0 20px 40px rgba(16, 185, 129, 0.4); animation: tvPulse 2s infinite; }
+@keyframes tvPulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+/* --- ACHTERGROND ANIMATIES (GPU ACCELERATED) --- */
+.bg-color { background-color: var(--bg-val, #000); }
+.bg-blur-img { position: absolute; top: -10%; left: -10%; width: 120%; height: 120%; object-fit: cover; filter: blur(40px) brightness(0.4) saturate(1.8); will-change: transform; }
+
+.bg-aurora { background: linear-gradient(45deg, #0f172a, #1e1b4b, #064e3b); background-size: 400% 400%; animation: auroraGradient 15s ease infinite; }
+@keyframes auroraGradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+.bg-starfield { background: radial-gradient(circle at center, #1e293b 0%, #000 100%); position: relative; }
+.bg-starfield::before { content:''; position:absolute; inset:-200%; background: transparent url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMSIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjUpIi8+PC9zdmc+') repeat; animation: starRotate 200s linear infinite; will-change: transform; }
+@keyframes starRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.bg-matrix { background: #000; position: relative; overflow: hidden; }
+.bg-matrix::after { content:''; position:absolute; inset:0; background: repeating-linear-gradient(180deg, rgba(0,255,0,0.05) 0, rgba(0,255,0,0.05) 2px, transparent 2px, transparent 4px); animation: matrixFall 10s linear infinite; will-change: transform; }
+@keyframes matrixFall { from { transform: translateY(-100%); } to { transform: translateY(100%); } }
+
+.bg-ocean { background: linear-gradient(180deg, #0284c7, #1e3a8a); position: relative; overflow:hidden; }
+.bg-ocean::before { content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%; background: radial-gradient(circle, rgba(255,255,255,0.1) 10%, transparent 10%), radial-gradient(circle, rgba(255,255,255,0.1) 10%, transparent 10%); background-size: 100px 100px; background-position: 0 0, 50px 50px; animation: oceanWave 20s linear infinite alternate; will-change: transform; }
+@keyframes oceanWave { from { transform: translateY(0) rotate(0deg); } to { transform: translateY(50px) rotate(5deg); } }
+
+/* --- OVERLAYS (Watermerk, Klok, Radio) --- */
+.ss-tv-watermark { position: absolute; font-size: clamp(2rem, 4vw, 4rem); font-weight: 800; color: rgba(255,255,255,0.8); text-shadow: 0 4px 20px rgba(0,0,0,0.9); z-index: 10; white-space: nowrap; }
+.pos-top-left { top: 40px; left: 60px; }
+.pos-top-right { top: 40px; right: 60px; }
+.pos-bottom-left { bottom: 40px; left: 60px; }
+.pos-bottom-right { bottom: 40px; right: 60px; }
+
+.ss-tv-clock { position: absolute; background: rgba(0,0,0,0.4); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 15px 30px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 20px 40px rgba(0,0,0,0.5); z-index: 10; transition: opacity 0.5s; opacity: 0; }
+.ss-tv-clock.visible { opacity: 1; }
+#ss-tv-time { font-size: clamp(3rem, 5vw, 5rem); font-weight: 800; line-height: 1; letter-spacing: -2px; }
+.ss-tv-date { font-size: clamp(1rem, 1.5vw, 1.5rem); font-weight: 600; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 2px; margin-top: 5px; }
+
+/* Klok Stijlen */
+.clock-neon { background: transparent; border: none; box-shadow: none; color: #fff; text-shadow: 0 0 10px #ec4899, 0 0 20px #ec4899, 0 0 40px #ec4899; font-family: 'Space Mono', monospace; }
+.clock-retro { background: #1e293b; border-radius: 8px; border: 2px solid #334155; font-family: 'Space Mono', monospace; }
+.clock-minimal { background: transparent; border: none; backdrop-filter: none; box-shadow: none; font-weight: 400; }
+
+.ss-tv-radio-widget { position: absolute; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 16px 24px; display: flex; align-items: center; gap: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); z-index: 10; transition: opacity 0.5s, transform 0.5s; opacity: 0; transform: translateY(20px); }
+.ss-tv-radio-widget.visible { opacity: 1; transform: translateY(0); }
+.ss-tv-radio-logo { width: 60px; height: 60px; object-fit: contain; border-radius: 8px; background: #fff; padding: 4px; }
+.ss-tv-radio-info { display: flex; flex-direction: column; }
+.ss-tv-radio-title { font-size: 0.9rem; color: var(--primary, #3b82f6); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+.ss-tv-radio-name { font-size: 1.5rem; font-weight: 700; color: #fff; }
+
+.ss-tv-radio-equalizer { display: flex; gap: 4px; height: 24px; align-items: flex-end; margin-left: 10px; }
+.ss-tv-radio-equalizer div { width: 6px; background: var(--primary, #3b82f6); border-radius: 3px; animation: eqBounce 1s infinite alternate; }
+.ss-tv-radio-equalizer div:nth-child(2) { animation-delay: 0.2s; }
+.ss-tv-radio-equalizer div:nth-child(3) { animation-delay: 0.4s; }
+@keyframes eqBounce { 0% { height: 4px; } 100% { height: 24px; } }
+
+/* --- SLIDING DOM ITEMS (De Media) --- */
+/* FASE 4 FIX: GPU Acceleratie via will-change */
+.ss-tv-slide { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; will-change: transform, opacity, filter; z-index: 1; }
+.ss-tv-slide.active { opacity: 1; z-index: 2; }
+.ss-tv-slide.outgoing { z-index: 3; } 
+
+.ss-tv-media { max-width: 100%; max-height: 100%; display: block; object-fit: contain; box-shadow: 0 30px 60px rgba(0,0,0,0.8); }
+.ss-tv-media.fit-cover { width: 100%; height: 100%; object-fit: cover; box-shadow: none; }
+.ss-tv-media.fit-fill { width: 100%; height: 100%; object-fit: fill; box-shadow: none; }
+
+/* Enterprise: Vignette Overlay */
+.ss-vignette-overlay { position: absolute; inset: 0; background: radial-gradient(circle, transparent 50%, rgba(0,0,0,0.5) 100%); pointer-events: none; z-index: 5; }
+
+/* Enterprise: Tile Animation */
+.tile-anim { animation: tilePan 60s linear infinite alternate; background-repeat: repeat; width: 100%; height: 100%; will-change: background-position; }
+@keyframes tilePan { from { background-position: 0 0; } to { background-position: 500px 500px; } }
+
+/* Ken Burns (Trage Zoom) */
+/* FASE 4 FIX: transform3d gebruikt voor GPU-acceleratie */
+@keyframes kenBurns { 0% { transform: translate3d(0,0,0) scale(1); } 100% { transform: translate3d(0,0,0) scale(1.15); } }
+
+/* --- 15 HARDWARE ACCELERATED TRANSITIONS --- */
+
+/* 1. Crossfade */
+.trans-fade-in { animation: fadeIn 1s ease forwards; }
+.trans-fade-out { animation: fadeOut 1s ease forwards; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+
+/* 2. Slide Links */
+.trans-slide-l-in { animation: slideLIn 1s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+.trans-slide-l-out { animation: slideLOut 1s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+@keyframes slideLIn { from { transform: translate3d(100%, 0, 0); } to { transform: translate3d(0, 0, 0); } }
+@keyframes slideLOut { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-100%, 0, 0); } }
+
+/* 3. Slide Rechts */
+.trans-slide-r-in { animation: slideRIn 1s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+.trans-slide-r-out { animation: slideROut 1s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+@keyframes slideRIn { from { transform: translate3d(-100%, 0, 0); } to { transform: translate3d(0, 0, 0); } }
+@keyframes slideROut { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(100%, 0, 0); } }
+
+/* 4. Slide Boven */
+.trans-slide-u-in { animation: slideUIn 1s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+.trans-slide-u-out { animation: slideUOut 1s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+@keyframes slideUIn { from { transform: translate3d(0, 100%, 0); } to { transform: translate3d(0, 0, 0); } }
+@keyframes slideUOut { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(0, -100%, 0); } }
+
+/* 5. Slide Onder */
+.trans-slide-d-in { animation: slideDIn 1s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+.trans-slide-d-out { animation: slideDOut 1s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+@keyframes slideDIn { from { transform: translate3d(0, -100%, 0); } to { transform: translate3d(0, 0, 0); } }
+@keyframes slideDOut { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(0, 100%, 0); } }
+
+/* 6. Zoom In */
+.trans-zoom-in-in { animation: zoomInIn 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+.trans-zoom-in-out { animation: fadeOut 1.2s ease forwards; }
+@keyframes zoomInIn { from { transform: translate3d(0,0,0) scale(0.5); opacity: 0; } to { transform: translate3d(0,0,0) scale(1); opacity: 1; } }
+
+/* 7. Zoom Out */
+.trans-zoom-out-in { animation: fadeIn 1.2s ease forwards; }
+.trans-zoom-out-out { animation: zoomOutOut 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+@keyframes zoomOutOut { from { transform: translate3d(0,0,0) scale(1); opacity: 1; } to { transform: translate3d(0,0,0) scale(1.5); opacity: 0; } }
+
+/* 8. Glitch */
+.trans-glitch-in { animation: glitchIn 0.6s ease forwards; }
+.trans-glitch-out { animation: fadeOut 0.6s ease forwards; }
+@keyframes glitchIn { 
+    0% { transform: translate3d(0,0,0) scale(1) skew(0); opacity:0; filter: hue-rotate(0); } 
+    20% { transform: translate3d(-20px, 10px, 0) scale(1.1) skew(10deg); opacity:1; filter: hue-rotate(90deg); } 
+    40% { transform: translate3d(20px, -10px, 0) scale(0.9) skew(-10deg); filter: hue-rotate(-90deg); } 
+    60% { transform: translate3d(-10px, 5px, 0) scale(1.05) skew(5deg); } 
+    80% { transform: translate3d(10px, -5px, 0) scale(0.95) skew(-5deg); } 
+    100% { transform: translate3d(0,0,0) scale(1) skew(0); opacity:1; filter: hue-rotate(0); } 
+}
+
+/* 9. Ripple */
+.trans-ripple-in { animation: rippleIn 1s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+.trans-ripple-out { animation: fadeOut 1s ease forwards; }
+@keyframes rippleIn { from { transform: translate3d(0,0,0) scale(0.9); opacity:0; filter: blur(20px); } to { transform: translate3d(0,0,0) scale(1); opacity:1; filter: blur(0); } }
+
+/* 10. Wipe */
+.trans-wipe-in { animation: wipeIn 1s cubic-bezier(0.65, 0, 0.35, 1) forwards; }
+.trans-wipe-out { opacity: 1; }
+@keyframes wipeIn { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+
+/* 11. Iris */
+.trans-iris-in { animation: irisIn 1.2s cubic-bezier(0.65, 0, 0.35, 1) forwards; }
+.trans-iris-out { opacity: 1; }
+@keyframes irisIn { from { clip-path: circle(0% at 50% 50%); } to { clip-path: circle(150% at 50% 50%); } }
+
+/* 12. Flip 3D */
+.trans-flip-in { animation: flipIn 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; transform-origin: center; backface-visibility: hidden; }
+.trans-flip-out { animation: flipOut 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; transform-origin: center; backface-visibility: hidden; }
+@keyframes flipIn { from { transform: perspective(1000px) rotateY(-90deg); opacity: 0; } to { transform: perspective(1000px) rotateY(0deg); opacity: 1; } }
+@keyframes flipOut { from { transform: perspective(1000px) rotateY(0deg); opacity: 1; } to { transform: perspective(1000px) rotateY(90deg); opacity: 0; } }
+
+/* 13. Dissolve */
+.trans-dissolve-in { animation: dissolveIn 1s ease forwards; }
+.trans-dissolve-out { animation: fadeOut 1s ease forwards; }
+@keyframes dissolveIn { from { opacity: 0; filter: blur(30px); } to { opacity: 1; filter: blur(0); } }
+
+/* 14. Hard Cut */
+.trans-cut-in { opacity: 1; animation: none; }
+.trans-cut-out { opacity: 0; animation: none; }
+
+/* 15. Parallax */
+.trans-parallax-in { animation: parallaxIn 1s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+.trans-parallax-out { animation: parallaxOut 1s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+@keyframes parallaxIn { from { transform: translate3d(100%, 0, 0); opacity: 1; } to { transform: translate3d(0, 0, 0); opacity: 1; } }
+@keyframes parallaxOut { from { transform: translate3d(0, 0, 0); opacity: 1; } to { transform: translate3d(-30%, 0, 0); opacity: 1; } }
+
+/* --- DUAL LAYOUT CLASSES --- */
+.layout-split-left { position: absolute; width: 50%; height: 100%; left: 0; top: 0; overflow: hidden; }
+.layout-split-right { position: absolute; width: 50%; height: 100%; left: 50%; top: 0; overflow: hidden; }
+.layout-pip-bg { position: absolute; width: 100%; height: 100%; inset: 0; }
+.layout-pip-box { position: absolute; width: 30%; aspect-ratio: 16/9; bottom: 10%; right: 10%; z-index: 15; box-shadow: 0 40px 80px rgba(0,0,0,0.8); border-radius: 12px; overflow: hidden; border: 4px solid rgba(255,255,255,0.8); }
+
+/* Helper classes */
+.fit-cover { width: 100%; height: 100%; object-fit: cover; }
+
+
+/* ========================================= */
+/* FIX BUG 7: VOORTGANGSBALKEN STYLES        */
+/* ========================================= */
+.ss-tv-progress-container {
+    position: fixed;
+    z-index: 99999;
+    pointer-events: none;
+}
+
+.ss-tv-progress-bar {
+    transform-origin: left center;
+    will-change: transform; /* FASE 4 FIX: Ook de tijdsbalk gaat nu vloeiend via de GPU */
+}
+
+/* Stijl 1: line_bottom (Subtiele lijn onderaan) */
+.ss-tv-progress-bar.style-line_bottom {
+    position: fixed; bottom: 0; left: 0; height: 4px;
+    background: #3b82f6; box-shadow: 0 -2px 10px rgba(59,130,246,0.8);
+}
+
+/* Stijl 2: bar_top (Cinematic balk boven) */
+.ss-tv-progress-bar.style-bar_top {
+    position: fixed; top: 0; left: 0; height: 8px;
+    background: rgba(255,255,255,0.9); backdrop-filter: blur(4px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+
+/* Stijl 3: neon_border (Glow aan de linkerkant die vult) */
+.ss-tv-progress-bar.style-neon_border {
+    position: fixed; top: 0; left: 0; height: 100vh;
+    background: rgba(16, 185, 129, 0.1);
+    border-right: 4px solid #10b981;
+    box-shadow: inset -10px 0 30px rgba(16, 185, 129, 0.3), 10px 0 30px rgba(16, 185, 129, 0.4);
+    mix-blend-mode: screen;
+}
+
+/* Stijl 4: apple_halo (Zwevende afgeronde pil onderaan) */
+.ss-tv-progress-bar.style-apple_halo {
+    position: fixed; bottom: 30px; left: 10%; height: 6px; border-radius: 6px;
+    background: #ffffff; box-shadow: 0 0 15px rgba(255,255,255,0.8);
+    max-width: 80%; /* Width vult van 0 naar 100% van deze 80% container */
+}
+
+/* Stijl 5: vignette (Donkere randen) */
+.ss-tv-progress-bar.style-vignette {
+    position: fixed; inset: 0;
+    background: radial-gradient(circle, transparent 50%, rgba(0,0,0,0.9) 120%);
+    width: 100% !important; /* Overschrijf JS width animatie voor vignette */
+    opacity: 0.5;
+}

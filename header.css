@@ -1,0 +1,209 @@
+/* PROJECT: FILEMANAGER | V1.1.2 | MODULE: Styles | FILE: public/css/layout/header.css */
+
+.header {
+    height: var(--header-height);
+    background: var(--bg-header);
+    border-bottom: 1px solid var(--border-dropdown);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 24px; z-index: 50;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.header-left, .header-right { display: flex; align-items: center; gap: 12px; }
+
+/* FASE 5: Mobiele Menu Knop (Hamburger) */
+.mobile-menu-btn {
+    display: none;
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-right: 8px;
+}
+.mobile-menu-btn:hover {
+    background: rgba(128,128,128,0.1);
+}
+
+/* --- APPLE STYLE SPOTLIGHT --- */
+.header-center { 
+    flex: 1; display: flex; justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.search-bar { 
+    position: relative; width: 100%; max-width: 450px; 
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    z-index: 51;
+}
+
+.search-bar input {
+    width: 100%; padding: 12px 42px;
+    border-radius: 14px;
+    border: 1px solid var(--border-dropdown);
+    background: var(--bg-dropdown);
+    color: var(--text-main); font-size: 0.95rem; font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    height: 46px;
+}
+
+.search-bar input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+    background: var(--bg-dropdown);
+}
+
+/* Icons in search */
+.search-icon { 
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    color: var(--primary); opacity: 0.8; pointer-events: none;
+    display: flex; align-items: center;
+}
+
+.kbd-shortcut {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    font-size: 0.75rem; background: rgba(128,128,128,0.1); padding: 3px 8px;
+    border-radius: 6px; border: 1px solid var(--border-dropdown); color: var(--text-muted);
+    pointer-events: none; font-weight: 600;
+}
+
+/* ACTIVE SPOTLIGHT MODE (Geactiveerd via JS class op body) */
+body.spotlight-active .header-center {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(15, 23, 42, 0.6); /* Dark dimming overlay */
+    z-index: 900;
+    align-items: flex-start; padding-top: 20vh; /* Apple positie: iets boven het midden */
+}
+
+body.spotlight-active .search-bar {
+    max-width: 650px;
+    transform: scale(1.15);
+}
+
+body.spotlight-active .search-bar input {
+    background: var(--bg-dropdown);
+    border-color: transparent;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    height: 60px; font-size: 1.1rem;
+}
+
+/* Breadcrumbs */
+.breadcrumbs { display: flex; align-items: center; gap: 6px; font-size: 0.9rem; font-weight: 600; color: var(--text-main); }
+.crumb { 
+    padding: 6px; border-radius: 8px; transition: background 0.2s; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+}
+.crumb:hover { background: rgba(128,128,128,0.1); }
+.crumb.root { color: var(--primary); }
+.crumb.root svg { stroke-width: 2.5px; } 
+.crumb::after { content: '/'; margin-left: 8px; color: #94a3b8; font-weight: normal; }
+.crumb:last-child::after { content: ''; }
+
+/* Header Actions */
+.btn-icon {
+    background: transparent; border: none; padding: 10px;
+    border-radius: 12px; cursor: pointer; color: var(--text-muted);
+    transition: all 0.2s; display: flex; align-items: center; justify-content: center;
+}
+.btn-icon:hover { background: rgba(37, 99, 235, 0.1); color: var(--primary); }
+
+/* Avatar Rounding FIX */
+.avatar-small {
+    width: 40px; height: 40px; min-width: 40px; /* Voorkom platdrukken */
+    border-radius: 50%; 
+    object-fit: cover; 
+    aspect-ratio: 1 / 1; /* Forceert perfect rond */
+    border: 2px solid var(--bg-main); 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    cursor: pointer; transition: transform 0.2s;
+    display: block;
+}
+.avatar-small:hover { transform: scale(1.05); border-color: var(--primary); }
+
+/* --- DROPDOWNS (Professional) --- */
+.user-menu-wrapper, .notification-wrapper { position: relative; }
+
+.dropdown-menu {
+    position: absolute; top: 65px; right: 0;
+    width: 300px;
+    background: var(--bg-surface); /* Switcht met thema, solide oppervlak */
+    color: var(--text-main);
+    border: 1px solid var(--border-dropdown);
+    border-radius: 14px;
+    box-shadow: var(--apple-shadow);
+    padding: 8px;
+    
+    /* Animation State */
+    opacity: 0; transform: translateY(-10px) scale(0.98); 
+    visibility: hidden; pointer-events: none;
+    transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    z-index: 1000;
+}
+
+/* Zichtbaar maken via JS class */
+.dropdown-menu.visible {
+    opacity: 1; transform: translateY(0) scale(1); 
+    visibility: visible; pointer-events: auto;
+}
+
+.dropdown-header {
+    padding: 12px 16px; font-weight: 700; font-size: 0.75rem;
+    color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border-dropdown);
+    display: flex; justify-content: space-between; align-items: center;
+}
+
+.dropdown-item {
+    padding: 10px 14px; margin: 4px 0; border-radius: 10px;
+    cursor: pointer; font-size: 0.9rem; font-weight: 500;
+    display: flex; align-items: center; gap: 12px;
+    color: var(--text-main); text-decoration: none;
+    transition: background 0.15s;
+}
+.dropdown-item:hover { background: rgba(37, 99, 235, 0.08); color: var(--primary); }
+.item-danger:hover { background: rgba(239, 68, 68, 0.1); color: var(--error); }
+
+.badge-dot {
+    position: absolute; top: 10px; right: 10px;
+    width: 8px; height: 8px; background: var(--error);
+    border-radius: 50%; border: 2px solid var(--bg-header);
+    pointer-events: none;
+}
+
+/* =========================================================
+   --- FASE 5: MOBIELE OPTIMALISATIES (HEADER) --- 
+   ========================================================= */
+@media (max-width: 768px) {
+    .header {
+        padding: 0 12px;
+        gap: 8px;
+    }
+    
+    .mobile-menu-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .header-center {
+        /* Verberg the center search bar by default op mobiel om ruimte te besparen */
+        display: none;
+    }
+
+    body.spotlight-active .header-center {
+        display: flex;
+    }
+
+    .breadcrumbs {
+        font-size: 0.8rem;
+    }
+
+    /* Verberg het pad-pad-pad achter de root map op hele smalle schermen */
+    .crumb:not(.root) {
+        display: none;
+    }
+}

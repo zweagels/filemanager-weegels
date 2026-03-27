@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veilig Gedeeld | FileManager</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0f172a;
+            color: white;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        * { box-sizing: border-box; }
+        
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
+</head>
+<body>
+    <div id="public-app-root">
+        <div style="height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction:column; gap:20px;">
+            <div style="width: 40px; height: 40px; border: 4px solid rgba(59, 130, 246, 0.2); border-top-color: #3b82f6; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+            <div style="color: #94a3b8;">Interface laden...</div>
+        </div>
+    </div>
+    
+    <script>
+        window.onerror = function(msg, url, lineNo) {
+            document.getElementById('public-app-root').innerHTML = '<div style="text-align:center; padding:50px; color:#ef4444; font-family:sans-serif;"><h3>Er is een JavaScript fout opgetreden:</h3><p>' + msg + '</p><p>Regel: ' + lineNo + '</p></div>';
+            return false;
+        };
+    </script>
+
+    <script src="/public/js/modules/share/PublicView.js?v=13"></script>
+    
+    <script>
+        setTimeout(function() {
+            var root = document.getElementById('public-app-root');
+            if (root && root.innerHTML.indexOf('Interface laden...') !== -1) {
+                root.innerHTML = `
+                    <div style="text-align:center; padding:50px; color:#ef4444; font-family:sans-serif; background:#1e293b; margin:40px auto; max-width:600px; border-radius:12px; border:1px solid #334155;">
+                        <h2 style="margin-top:0;">⚠️ Bestand niet gevonden (404)</h2>
+                        <p style="color:#94a3b8; line-height:1.6;">De server kan het script <b>PublicView.js</b> niet vinden. Hierdoor blijft het scherm laden.</p>
+                        <hr style="border:none; border-top:1px solid #334155; margin:20px 0;">
+                        <h4 style="color:white; margin-bottom:10px;">Hoe los je dit op?</h4>
+                        <ol style="color:#94a3b8; text-align:left; line-height:1.8; margin-top:0;">
+                            <li>Controleer via FTP of je het script exact in deze map hebt geplaatst:<br><code style="color:#3b82f6;">/public/js/modules/share/PublicView.js</code></li>
+                            <li>Druk in dit scherm op <b>F12</b> op je toetsenbord, ga naar het tabblad <b>Console</b> en kijk of er een rode "404 Not Found" foutmelding staat.</li>
+                        </ol>
+                    </div>
+                `;
+            }
+        }, 2500);
+    </script>
+</body>
+</html>

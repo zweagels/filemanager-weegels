@@ -1,0 +1,669 @@
+/* PROJECT: FILEMANAGER | V1.1.2 | MODULE: Dashboard | FILE: public/css/views/dashboard.css */
+
+/* --- BASIS LAY-OUT DASHBOARD --- */
+.dashboard-container {
+    padding: 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    /* FIX: Absolute hoogte per rij. Dit blokkeert het uitrekken (1x3 probleem) */
+    grid-auto-rows: 260px; 
+    grid-auto-flow: dense; /* Zorgt dat gaten in het grid mooi worden opgevuld door kleinere widgets */
+    gap: 24px;
+    width: 100%;
+    align-content: start;
+}
+
+/* Modifiers voor dynamische widget groottes */
+.widget-1x1 { grid-column: span 1; grid-row: span 1; }
+.widget-2x1 { grid-column: span 2; grid-row: span 1; }
+.widget-1x2 { grid-column: span 1; grid-row: span 2; }
+.widget-2x2 { grid-column: span 2; grid-row: span 2; }
+.widget-full { grid-column: 1 / -1; grid-row: span 1; } /* Full breedte, 1 blok hoog */
+
+/* Responsive breakpoints */
+@media (max-width: 1024px) {
+    .widget-2x1, .widget-2x2 { grid-column: span 1; }
+}
+
+@media (max-width: 768px) {
+    .dashboard-container {
+        grid-template-columns: 1fr;
+        padding: 16px;
+    }
+    .widget-1x1, .widget-2x1, .widget-1x2, .widget-2x2, .widget-full {
+        grid-column: 1 / -1;
+        /* Op mobiel laten we ze hun natuurlijke hoogte of 1 span innemen */
+    }
+}
+
+/* --- WIDGET BASE CARD --- */
+.dashboard-widget {
+    background: var(--bg-dropdown);
+    border: 1px solid var(--border-dropdown);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease, grid-column 0.3s, grid-row 0.3s;
+    position: relative;
+    overflow: hidden;
+    height: 100%; /* Zorgt dat hij exact de css grid cel vult */
+    min-height: 0; /* Zorgt dat flexbox de cellen niet uitrekt op basis van inhoud */
+}
+
+.theme-dark .dashboard-widget {
+    background: var(--bg-surface, #1e293b);
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+.widget-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    flex-shrink: 0; /* Header mag nooit krimpen */
+}
+
+.widget-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.widget-icon {
+    color: var(--primary);
+}
+
+.widget-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    min-height: 0; /* Laat content krimpen/scrollen */
+    overflow-y: auto;
+}
+
+/* Scrollbars verfijnen in widgets */
+.dashboard-widget ::-webkit-scrollbar { width: 4px; }
+.dashboard-widget ::-webkit-scrollbar-track { background: transparent; }
+.dashboard-widget ::-webkit-scrollbar-thumb { background: rgba(128,128,128,0.2); border-radius: 4px; }
+
+/* --- BEWERKBALK (EDIT TOOLBAR) --- */
+.dashboard-edit-toolbar {
+    background: var(--bg-dropdown);
+    border: 1px solid var(--primary);
+    border-radius: 12px;
+    padding: 12px 24px;
+    margin: 20px 24px 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.15);
+    animation: slideInDown 0.3s ease forwards;
+    z-index: 100;
+    position: relative;
+}
+
+@keyframes slideInDown {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.edit-toolbar-title {
+    font-weight: 700;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.1rem;
+}
+
+.edit-toolbar-actions {
+    display: flex;
+    gap: 12px;
+}
+
+/* --- EDIT MODE (WIEBELEN & SLEPEN & CONTROLS) --- */
+@keyframes wiggle {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(-0.5deg); }
+    50% { transform: rotate(0deg); }
+    75% { transform: rotate(0.5deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.dashboard-edit-mode .dashboard-widget {
+    animation: wiggle 0.4s infinite;
+    cursor: grab;
+    z-index: 10;
+}
+
+.dashboard-edit-mode .dashboard-widget::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(128, 128, 128, 0.05);
+    z-index: 5;
+    pointer-events: auto; /* Neemt basiskliks op om slepen vloeiend te houden, maar overlay controls werken via z-index */
+}
+
+.dashboard-edit-mode .dashboard-widget:hover {
+    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2);
+    border-color: var(--primary);
+}
+
+.dashboard-edit-mode .dashboard-widget:active,
+.dashboard-edit-mode .dashboard-widget.is-dragging {
+    cursor: grabbing;
+    animation: none;
+    transform: scale(1.02);
+    z-index: 100;
+    opacity: 0.9;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.widget-drag-ghost {
+    opacity: 0.3;
+    border: 2px dashed var(--primary);
+    background: rgba(37, 99, 235, 0.05);
+}
+
+/* --- GEAVANCEERDE WIDGET CONTROLS --- */
+.widget-controls {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(3px);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    z-index: 101;
+    pointer-events: auto; 
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.dashboard-edit-mode .dashboard-widget:hover .widget-controls {
+    display: flex;
+    opacity: 1;
+}
+
+.size-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.1);
+    padding: 10px;
+    border-radius: 12px;
+    max-width: 90%;
+}
+
+.size-btn {
+    background: rgba(0,0,0,0.5);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.size-btn:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    transform: scale(1.05);
+}
+
+.size-btn.active-size {
+    background: var(--primary);
+    border-color: var(--primary);
+    box-shadow: 0 0 10px rgba(37,99,235,0.5);
+}
+
+.widget-control-btn.delete {
+    background: var(--error);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+    box-shadow: 0 4px 10px rgba(239, 68, 68, 0.4);
+}
+
+.widget-control-btn.delete:hover {
+    transform: scale(1.15);
+}
+
+/* Edit Mode Toggle Button in Standaard View */
+.btn-edit-dashboard {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-edit-dashboard:hover {
+    background: var(--primary);
+    color: white;
+}
+
+/* --- SPECIFIEKE WIDGETS --- */
+
+/* 1. Welcome Banner Widget */
+.welcome-banner {
+    color: white;
+    padding: 30px;
+    border-radius: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3);
+    border: none;
+    transition: background 0.5s ease;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.welcome-text {
+    flex: 1;
+    z-index: 2;
+    transition: all 0.3s ease;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.welcome-text h1 {
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
+}
+
+.welcome-text p {
+    opacity: 0.9;
+    transition: all 0.3s ease;
+}
+
+/* Welcome Typografie Modifiers */
+.welcome-text.align-left { text-align: left; }
+.welcome-text.align-center { text-align: center; }
+.welcome-text.align-right { text-align: right; }
+
+.welcome-text.size-sm h1 { font-size: 1.5rem; }
+.welcome-text.size-sm p { font-size: 0.95rem; }
+.welcome-text.size-md h1 { font-size: 2rem; }
+.welcome-text.size-md p { font-size: 1.1rem; }
+.welcome-text.size-lg h1 { font-size: 2.8rem; }
+.welcome-text.size-lg p { font-size: 1.3rem; }
+
+.welcome-text.weight-normal h1 { font-weight: 500; }
+.welcome-text.weight-bold h1 { font-weight: 800; }
+
+.welcome-text.effect-none h1 { text-shadow: none; }
+.welcome-text.effect-glow h1 { text-shadow: 0 0 20px rgba(255,255,255,0.7); }
+.welcome-text.effect-shadow h1 { text-shadow: 2px 4px 10px rgba(0,0,0,0.6); }
+
+/* Welcome Menu (Tandwiel + Dropdown) */
+.welcome-settings-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.2);
+    border: none;
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s, background 0.2s, transform 0.2s;
+    z-index: 10;
+}
+
+.welcome-banner:hover .welcome-settings-btn,
+.dashboard-edit-mode .welcome-settings-btn {
+    opacity: 1;
+}
+
+.welcome-settings-btn:hover {
+    background: rgba(0, 0, 0, 0.5);
+    transform: rotate(90deg);
+}
+
+.welcome-dropdown {
+    position: absolute;
+    top: 65px;
+    right: 20px;
+    width: 280px;
+    background: var(--bg-dropdown);
+    border: 1px solid var(--border-dropdown);
+    border-radius: 12px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    padding: 16px;
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+    z-index: 105;
+    color: var(--text-main);
+    animation: slideInFade 0.2s ease forwards;
+}
+
+.welcome-dropdown.visible {
+    display: flex;
+}
+
+.welcome-dropdown-group label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+}
+
+.welcome-dropdown-select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid var(--border-dropdown);
+    background: rgba(128,128,128,0.05);
+    color: var(--text-main);
+    font-size: 0.9rem;
+    outline: none;
+}
+
+.welcome-color-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+}
+
+.welcome-bg-option {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.2s, border-color 0.2s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.welcome-bg-option:hover { transform: scale(1.15); }
+.welcome-bg-option.active { border-color: var(--text-main); transform: scale(1.1); }
+
+/* 2. Quick Notes Widget */
+.notes-textarea {
+    width: 100%;
+    flex: 1;
+    min-height: 0; /* Zorgt dat de textarea mooi past en niet overloopt in 1x1 */
+    background: rgba(253, 224, 71, 0.15);
+    border: 1px solid rgba(253, 224, 71, 0.3);
+    border-radius: 8px;
+    padding: 12px;
+    color: var(--text-main);
+    font-family: inherit;
+    font-size: 0.95rem;
+    resize: none;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.theme-dark .notes-textarea {
+    background: rgba(234, 179, 8, 0.05);
+    border-color: rgba(234, 179, 8, 0.15);
+}
+
+.notes-textarea:focus {
+    border-color: var(--warning);
+    background: rgba(253, 224, 71, 0.25);
+}
+
+/* 3. Shortcuts Widget */
+.shortcuts-grid {
+    display: grid;
+    /* Dynamische kolommen voor 1x1 (krimpt netjes in) */
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    grid-auto-rows: minmax(100px, auto);
+    gap: 12px;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.shortcut-btn {
+    background: rgba(128, 128, 128, 0.05);
+    border: 1px solid var(--border-dropdown);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--text-main);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.shortcut-btn.has-thumb {
+    padding: 0;
+    border: none;
+}
+
+.shortcut-btn.has-thumb span {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    padding: 6px;
+    font-size: 0.75rem;
+    backdrop-filter: blur(4px);
+}
+
+.shortcut-btn:hover {
+    background: rgba(37, 99, 235, 0.1);
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.shortcut-btn span {
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+/* 4. Storage & Type Charts */
+.chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    flex: 1;
+    min-height: 0; /* Laat de chart krimpen indien nodig */
+    overflow: hidden;
+}
+
+.chart-center-info {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.chart-center-info .percentage {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--text-main);
+    line-height: 1;
+}
+
+.chart-center-info .label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 4px;
+}
+
+/* 5. Activity Log Widget */
+.activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+    min-height: 0; /* Zorgt dat de lijst gaat scrollen in 1x1 modus! */
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    border-radius: 8px;
+    background: rgba(128, 128, 128, 0.03);
+    border: 1px solid transparent;
+    transition: all 0.2s;
+    flex-shrink: 0; /* Voorkomt dat items geplet worden in scroll list */
+}
+
+.activity-item:hover {
+    background: var(--bg-main);
+    border-color: var(--border-dropdown);
+    transform: translateX(2px);
+}
+
+.activity-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(37, 99, 235, 0.1);
+    color: var(--primary);
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
+.activity-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.activity-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.activity-meta {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+/* 7. Upload Dropzone Widget */
+.upload-dropzone {
+    border: 2px dashed var(--border-dropdown);
+    border-radius: 12px;
+    background: rgba(128, 128, 128, 0.02);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    text-align: center;
+    color: var(--text-muted);
+    transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    cursor: pointer;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.upload-dropzone:hover, .upload-dropzone.drag-over {
+    border-color: var(--primary);
+    background: rgba(37, 99, 235, 0.05);
+    color: var(--primary);
+}
+
+.upload-dropzone svg {
+    margin-bottom: 12px;
+    transition: transform 0.2s ease;
+}
+
+.upload-dropzone:hover svg {
+    transform: translateY(-5px);
+}
+
+/* =========================================================
+   --- FASE 5: MOBIELE OPTIMALISATIES (DASHBOARD) --- 
+   ========================================================= */
+
+@media (max-width: 768px) {
+    .dashboard-container {
+        grid-template-columns: 1fr !important;
+        grid-auto-rows: auto; /* Laat de widgets de natuurlijke hoogte aannemen op mobiel */
+        padding: 16px;
+        gap: 16px;
+    }
+    
+    .widget-1x1, .widget-2x1, .widget-1x2, .widget-2x2, .widget-full {
+        grid-column: 1 / -1 !important;
+        grid-row: auto !important;
+        min-height: 200px; /* Zorgt dat ze niet pletten op mobiel */
+    }
+
+    .welcome-text h1 {
+        font-size: 1.6rem !important; /* Voorkom dat de tekst uit de banner breekt op kleine schermen */
+    }
+    
+    .welcome-text p {
+        font-size: 0.9rem !important;
+    }
+}

@@ -1,0 +1,272 @@
+/* PROJECT: FILEMANAGER | V1.1.2 | MODULE: Styles | FILE: public/css/layout/sidebar.css */
+
+/* --- JOUW ORIGINELE STIJL (HERSTELD) --- */
+
+.sidebar {
+    background-color: var(--sidebar-bg);
+    color: var(--text-muted);
+    display: flex; flex-direction: column;
+    border-right: 1px solid rgba(255,255,255,0.05);
+    overflow: hidden; position: relative;
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.3);
+    z-index: 20;
+    /* Noise texture behouden we wel voor de 'Soul', maar subtieler */
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXVnbGxrAwMCBAuPAAAAAElFTkSuQmCC');
+    background-blend-mode: overlay;
+    background-repeat: repeat;
+}
+
+/* Header */
+.sidebar-header {
+    height: var(--header-height);
+    display: flex; align-items: center; padding: 0 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    background: linear-gradient(to bottom, rgba(255,255,255,0.03), transparent);
+}
+
+.logo-shield-small {
+    width: 32px; height: 36px; min-width: 32px; /* Fix voor resizen */
+    background: linear-gradient(135deg, #2563EB, #1e3a8a);
+    color: white; font-weight: bold; font-size: 0.8rem;
+    display: flex; align-items: center; justify-content: center;
+    clip-path: polygon(50% 0%, 100% 15%, 100% 75%, 50% 100%, 0% 75%, 0% 15%);
+    margin-right: 12px;
+    box-shadow: 0 0 15px rgba(37, 99, 235, 0.4);
+}
+
+.brand-name {
+    color: var(--text-inverse);
+    font-weight: 700; font-size: 1.1rem;
+    letter-spacing: -0.5px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    white-space: nowrap; /* Voorkomt tekstbreuk */
+}
+
+/* Content (Flex om prullenbak te duwen) */
+.sidebar-content { 
+    flex: 1; overflow-y: auto; padding: 20px 12px; 
+    display: flex; flex-direction: column; 
+}
+
+/* Scrollbar styling */
+.custom-scrollbar::-webkit-scrollbar { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+/* --- KLEUR THEMA'S PER FUNCTIE --- */
+.item-blue   { --item-accent: #3b82f6; } /* Mijn Bestanden */
+.item-purple { --item-accent: #a855f7; } /* Recent */
+.item-gold   { --item-accent: #fbbf24; } /* Favorieten */
+.item-pink   { --item-accent: #ec4899; } /* Albums */
+.item-teal   { --item-accent: #14b8a6; } /* Tags */
+.item-red    { --item-accent: #ef4444; } /* Prullenbak */
+.item-cyan   { --item-accent: #06b6d4; } /* FASE 11: Gedeelde Links */
+
+/* Navigation Items */
+.nav-item {
+    display: flex; align-items: center;
+    padding: 12px 16px; margin-bottom: 4px;
+    cursor: pointer;
+    border-radius: 12px; /* Gevraagde ronding */
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    color: #94a3b8;
+    border-left: 3px solid transparent; /* Voorbereiding active state */
+    height: 48px; /* Consistentie */
+}
+
+.nav-item .icon {
+    width: 20px; height: 20px; margin-right: 12px; min-width: 20px;
+    stroke-width: 2px;
+    transition: transform 0.3s ease, stroke 0.3s ease;
+}
+
+.nav-item .label {
+    white-space: nowrap; transition: opacity 0.2s;
+}
+
+/* Hover: Gebruik de specifieke kleurvariabele */
+.nav-item:hover {
+    background: linear-gradient(90deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
+    color: #f8fafc;
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.nav-item:hover .icon {
+    transform: scale(1.1);
+    stroke: var(--item-accent, white); /* Fallback naar wit als geen kleur is gezet */
+}
+
+/* Active State */
+.nav-item.active {
+    background: linear-gradient(135deg, var(--item-accent, #2563EB) 0%, rgba(255,255,255,0.1) 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border-left-color: var(--item-accent, #2563EB);
+}
+
+.nav-item.active .icon {
+    stroke: white;
+}
+
+/* Accordion Headers */
+.accordion-header {
+    padding: 10px 16px;
+    font-size: 0.7rem; font-weight: 800;
+    color: #64748b; letter-spacing: 1px;
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 20px; margin-bottom: 5px;
+    white-space: nowrap;
+}
+
+/* Inherit kleur voor accordion header icons bij hover */
+.accordion:hover .accordion-header .title {
+    color: var(--item-accent);
+    transition: color 0.3s;
+}
+
+.btn-icon-small {
+    background: none; border: none; color: inherit; cursor: pointer;
+    font-size: 1.2rem; transition: color 0.2s;
+    /* Uitlijning fix */
+    display: flex; align-items: center; justify-content: center; width: 20px; height: 20px;
+}
+.btn-icon-small:hover { color: var(--item-accent, white); }
+
+/* --- TAGS STYLING (GLOSS & GLOW) --- */
+.tag-cloud { 
+    padding: 5px 16px; 
+    display: flex; flex-wrap: wrap; gap: 8px; 
+}
+
+.tag-pill {
+    padding: 6px 14px;
+    border-radius: 50px; /* Pilvorm */
+    font-size: 0.8rem; font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    /* Standaard Kleur & Glans */
+    color: #cbd5e1;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    
+    /* Glass Effect */
+    backdrop-filter: blur(4px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    
+    /* Layout */
+    max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* Hover: Kleur + Sterke Glans + 3D lift */
+.tag-pill:hover {
+    color: white;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+    border-color: var(--item-accent, white);
+    box-shadow: 
+        0 4px 15px rgba(0,0,0,0.3), /* Drop Shadow */
+        inset 0 1px 0 rgba(255,255,255,0.3); /* Inner Highlight */
+    transform: translateY(-2px) scale(1.02);
+}
+
+/* Automatische kleuren toewijzen voor hover border/shadow */
+.tag-pill:nth-child(4n+1):hover { --item-accent: #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
+.tag-pill:nth-child(4n+2):hover { --item-accent: #ec4899; box-shadow: 0 0 15px rgba(236, 72, 153, 0.4); }
+.tag-pill:nth-child(4n+3):hover { --item-accent: #fbbf24; box-shadow: 0 0 15px rgba(251, 191, 36, 0.4); }
+.tag-pill:nth-child(4n+4):hover { --item-accent: #14b8a6; box-shadow: 0 0 15px rgba(20, 184, 166, 0.4); }
+
+/* Divider */
+.divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    margin: 10px 0;
+    flex-shrink: 0;
+}
+
+/* Storage Meter (Rood accent omdat het dicht bij prullenbak staat) */
+.sidebar-footer {
+    padding: 20px 24px;
+    background: rgba(0,0,0,0.2);
+    border-top: 1px solid rgba(255,255,255,0.05);
+}
+.meter-labels { display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 8px; color: #94a3b8; white-space: nowrap; }
+.meter-bar { height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
+.meter-fill { height: 100%; background: linear-gradient(90deg, #3b82f6, #ef4444); width: 0%; border-radius: 3px; box-shadow: 0 0 10px rgba(239, 68, 68, 0.3); }
+
+/* --- COLLAPSED MODE (ICON ONLY) --- */
+/* Dit wordt getriggered door de JS resizer onder de 180px */
+.sidebar.collapsed .brand-name, 
+.sidebar.collapsed .label,
+.sidebar.collapsed .meter-labels,
+.sidebar.collapsed .accordion-header .title {
+    display: none;
+}
+
+.sidebar.collapsed .sidebar-header {
+    justify-content: center; padding: 0;
+}
+.sidebar.collapsed .logo-shield-small { margin-right: 0; }
+
+.sidebar.collapsed .nav-item {
+    justify-content: center; padding: 12px 0;
+}
+.sidebar.collapsed .nav-item .icon { margin-right: 0; }
+.sidebar.collapsed .nav-item:hover { transform: none; background: rgba(255,255,255,0.1); }
+
+.sidebar.collapsed .accordion-header { justify-content: center; height: 10px; }
+.sidebar.collapsed .btn-icon-small { display: none; }
+
+/* Tags in collapsed mode worden bolletjes */
+.sidebar.collapsed .tag-cloud {
+    flex-direction: column; align-items: center; gap: 8px;
+}
+.sidebar.collapsed .tag-pill {
+    width: 10px; height: 10px; padding: 0; 
+    border-radius: 50%; color: transparent; border: none;
+}
+.sidebar.collapsed .tag-pill:nth-child(4n+1) { background: #3b82f6; box-shadow: 0 0 8px #3b82f6; }
+.sidebar.collapsed .tag-pill:nth-child(4n+2) { background: #ec4899; box-shadow: 0 0 8px #ec4899; }
+.sidebar.collapsed .tag-pill:nth-child(4n+3) { background: #fbbf24; box-shadow: 0 0 8px #fbbf24; }
+.sidebar.collapsed .tag-pill:nth-child(4n+4) { background: #14b8a6; box-shadow: 0 0 8px #14b8a6; }
+
+.sidebar.collapsed .sidebar-footer { padding: 20px 10px; }
+
+/* =========================================================
+   --- FASE 5: MOBIELE OPTIMALISATIES (SIDEBAR SLIDE-OVER) --- 
+   ========================================================= */
+
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 280px; /* Fixed breedte op mobiel */
+        transform: translateX(-100%);
+        z-index: 100; /* Bovenop alles! */
+        transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        box-shadow: none;
+    }
+    
+    body.mobile-menu-open .sidebar {
+        transform: translateX(0);
+        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
+    }
+    
+    /* Voorkom dat de sidebar 'collapsed' op mobiel, want resizer is weg */
+    .sidebar.collapsed .brand-name, 
+    .sidebar.collapsed .label,
+    .sidebar.collapsed .meter-labels,
+    .sidebar.collapsed .accordion-header .title {
+        display: block;
+    }
+    .sidebar.collapsed .sidebar-header { justify-content: flex-start; padding: 0 24px; }
+    .sidebar.collapsed .logo-shield-small { margin-right: 12px; }
+    .sidebar.collapsed .nav-item { justify-content: flex-start; padding: 12px 16px; }
+    .sidebar.collapsed .nav-item .icon { margin-right: 12px; }
+    .sidebar.collapsed .accordion-header { justify-content: space-between; height: auto; }
+    .sidebar.collapsed .btn-icon-small { display: flex; }
+    .sidebar.collapsed .tag-cloud { flex-direction: row; }
+    .sidebar.collapsed .tag-pill { width: auto; height: auto; padding: 6px 14px; border-radius: 50px; color: #cbd5e1; }
+}

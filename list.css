@@ -1,0 +1,236 @@
+/* PROJECT: FILEMANAGER | V1.1.2 | MODULE: Styles | FILE: public/css/views/list.css */
+
+.view-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background: var(--bg-dropdown);
+    border: 1px solid var(--border-dropdown);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+}
+
+/* We gebruiken CSS variabelen (aangestuurd door JS) voor vloeiend schalen van kolommen */
+/* FIX: Extra ruimte toegevoegd aan het begin voor de Checkbox (--col-check) */
+.list-header, .list-row {
+    display: grid;
+    /* De standaard fallback breedtes als JS nog niet is geladen */
+    grid-template-columns: var(--col-check, 40px) var(--col-icon, 50px) var(--col-name, 2.5fr) var(--col-date, 1fr) var(--col-size, 1fr) var(--col-type, 1fr) var(--col-color, 60px) 60px;
+    align-items: center;
+    border-bottom: 1px solid var(--border-dropdown);
+}
+
+.list-header {
+    background: rgba(128, 128, 128, 0.03);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Resizers in Header */
+.list-header .list-cell {
+    position: relative; /* Voor de absolute resizer */
+}
+
+.col-resizer {
+    position: absolute;
+    right: 0;
+    top: 25%;
+    height: 50%;
+    width: 4px;
+    background: transparent;
+    cursor: col-resize;
+    z-index: 10;
+    border-radius: 2px;
+    transition: background 0.2s;
+}
+
+.col-resizer:hover, .col-resizer.resizing {
+    background: var(--primary);
+    width: 6px;
+    right: -1px;
+}
+
+.list-row {
+    padding: 4px 0;
+    cursor: pointer;
+    transition: background 0.2s;
+    background: transparent;
+    animation: slideInRow 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    opacity: 0;
+}
+
+.list-row:last-child {
+    border-bottom: none;
+}
+
+.list-row:hover {
+    background: rgba(128, 128, 128, 0.05);
+}
+
+.list-row.selected {
+    background: rgba(37, 99, 235, 0.08);
+}
+
+.list-cell {
+    padding: 10px 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+}
+
+/* Specifieke cellen */
+.name-cell {
+    font-weight: 600;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+}
+
+.meta-cell {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.badge {
+    padding: 3px 8px;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+/* --- COLUMN CONTEXT MENU --- */
+.column-context-menu {
+    position: absolute;
+    background: var(--bg-dropdown);
+    border: 1px solid var(--border-dropdown);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    padding: 12px;
+    z-index: 9999;
+    min-width: 220px;
+    font-size: 0.9rem;
+    color: var(--text-main);
+    
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px) scale(0.95);
+    transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.column-context-menu.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+.column-toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.column-toggle-label:hover {
+    background: rgba(128, 128, 128, 0.05);
+}
+
+.column-toggle-label input[type="checkbox"] {
+    accent-color: var(--primary);
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+}
+
+.col-hidden {
+    display: none !important;
+}
+
+/* Kleur indicator voor 'color' kolom */
+.color-cell-indicator {
+    width: 14px; 
+    height: 14px; 
+    border-radius: 50%; 
+    display: inline-block; 
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+@keyframes slideInRow {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* FIX: ZICHTBAARHEID VAN CHECKBOX EN FAVORIETEN STER IN LIST VIEW */
+/* Checkbox heeft nu zijn eigen grid-cel gekregen */
+.list-row .check-cell .multi-select-checkbox {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.1s ease;
+    margin-left: 12px; /* Uitlijning binnen cel */
+    position: relative;
+    /* FIX: Geen absolute positioning meer, want hij heeft nu een eigen cel */
+    top: auto; left: auto;
+    width: 20px; height: 20px;
+    border-radius: 6px;
+    background: rgba(0,0,0,0.1);
+    border: 2px solid var(--text-muted);
+    display: flex; align-items: center; justify-content: center;
+}
+
+.list-row .check-cell .multi-select-checkbox svg {
+    width: 12px; height: 12px; color: white; opacity: 0; transform: scale(0.5); transition: all 0.2s;
+}
+
+/* Tonen bij hover */
+.list-row:hover .check-cell .multi-select-checkbox {
+    opacity: 1; pointer-events: auto;
+}
+
+/* Tonen en stijlen bij geselecteerd */
+.list-row.selected .check-cell .multi-select-checkbox {
+    opacity: 1; background: var(--primary); border-color: var(--primary); pointer-events: auto;
+}
+.list-row.selected .check-cell .multi-select-checkbox svg {
+    opacity: 1; transform: scale(1);
+}
+
+/* =========================================================
+   --- FASE 5: MOBIELE OPTIMALISATIES (LIST VIEW) --- 
+   ========================================================= */
+@media (max-width: 768px) {
+    /* Forceer de grid op mobiel: Checkbox, Icon, Name, FavButton */
+    .list-header, .list-row {
+        grid-template-columns: 35px 40px 1fr 40px !important;
+        gap: 5px;
+        padding-right: 0;
+    }
+    
+    /* Verberg alle extra detail-kolommen op een telefoon (Datum, Grootte, etc) */
+    .list-header .list-cell:nth-child(n+4):not(:last-child),
+    .list-row .meta-cell,
+    .list-row .list-cell:nth-last-child(2) /* De kleur-kolom indicator */ {
+        display: none !important;
+    }
+    
+    /* Geen kolom-resizers op aanraakschermen */
+    .col-resizer { display: none !important; }
+    
+    .list-row { padding: 8px 0; }
+    .name-cell { font-size: 0.9rem; padding-left: 0; }
+    .list-cell { padding: 10px 4px; }
+    
+    /* Toon checkbox altijd subtiel omdat touch geen hover heeft */
+    .list-row .check-cell .multi-select-checkbox {
+        opacity: 0.3;
+        margin-left: 6px;
+    }
+}

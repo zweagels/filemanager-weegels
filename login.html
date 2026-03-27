@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - FileManager</title>
+    <link rel="stylesheet" href="public/css/views/login.css">
+    <link rel="icon" type="image/png" href="public/assets/favicon.png">
+</head>
+<body>
+
+    <div class="bg-slideshow">
+        <div class="slide slide-1"></div>
+        <div class="slide slide-2"></div>
+        <div class="slide slide-3"></div>
+        <div class="overlay"></div>
+    </div>
+
+    <div class="auth-container">
+        
+        <div id="card-login" class="glass-card active">
+            <div class="brand-header">
+                <div class="logo-shield">
+                    <span class="logo-text">FM</span>
+                </div>
+                <h1 class="brand-title">FileManager</h1>
+                <p>Enterprise Editie</p>
+            </div>
+            
+            <form id="form-login">
+                <div class="form-group">
+                    <label for="login-user">Gebruikersnaam of E-mail</label>
+                    <input type="text" id="login-user" name="username" required autocomplete="username">
+                </div>
+                
+                <div class="form-group">
+                    <label for="login-pass">Wachtwoord</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="login-pass" name="password" required autocomplete="current-password">
+                        <button type="button" class="btn-peek" id="btn-peek-password" tabindex="-1" title="Toon wachtwoord">
+                            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="caps-warning" class="caps-warning hidden">⚠️ Caps Lock staat aan</div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary" id="btn-login">
+                        <span class="btn-text">Inloggen</span>
+                        <div class="btn-loader hidden"></div>
+                        <svg class="btn-success hidden" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="3" fill="none">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </button>
+                </div>
+            </form>
+
+            <div class="card-footer">
+                <p>Nog geen account? <a href="#" id="link-to-register">Registreer hier</a></p>
+            </div>
+            <div id="login-msg" class="msg-box hidden"></div>
+        </div>
+
+        <div id="card-register" class="glass-card hidden">
+            <div class="brand-header">
+                <h1 class="brand-title">Account Maken</h1>
+                <p>Start met FileManager</p>
+            </div>
+
+            <form id="form-register">
+                <div class="avatar-section">
+                    <label class="avatar-label">Profiel Foto</label>
+                    <div class="avatar-upload">
+                        <div class="avatar-preview" id="avatar-dropzone">
+                            <span class="placeholder-text" id="avatar-placeholder">Sleep foto</span>
+                            <img id="avatar-img" src="" class="hidden avatar-preview-img">
+                        </div>
+                        <input type="file" id="avatar-input" accept="image/*" hidden>
+                        <input type="hidden" id="avatar-base64" name="avatar">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Gebruikersnaam</label>
+                    <input type="text" name="username" required autocomplete="username">
+                </div>
+                
+                <div class="form-group">
+                    <label>E-mailadres</label>
+                    <input type="email" name="email" required autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <label>Wachtwoord</label>
+                    <input type="password" name="password" required autocomplete="new-password">
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary" id="btn-register">
+                        <span class="btn-text">Registreren</span>
+                        <div class="btn-loader hidden"></div>
+                    </button>
+                </div>
+            </form>
+
+            <div class="card-footer">
+                <p>Heb je al een account? <a href="#" id="link-to-login">Log hier in</a></p>
+            </div>
+             <div id="register-msg" class="msg-box hidden"></div>
+        </div>
+
+    </div> 
+    
+    <div id="modal-cropper" class="cropper-modal hidden">
+        <div class="cropper-content">
+            <h3>Snijd je foto bij</h3>
+            <p>Sleep om te verplaatsen & zoom</p>
+            
+            <div class="cropper-wrapper">
+                <canvas id="cropper-canvas"></canvas>
+                <div class="cropper-overlay"></div>
+            </div>
+
+            <div class="cropper-controls">
+                <span class="icon-small">-</span>
+                <input type="range" id="cropper-zoom" min="0.5" max="3" step="0.05" value="1">
+                <span class="icon-small">+</span>
+            </div>
+
+            <div class="cropper-actions">
+                <button type="button" id="btn-crop-cancel" class="btn-secondary">Annuleren</button>
+                <button type="button" id="btn-crop-save" class="btn-primary">Opslaan</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="public/js/views/Login.js"></script>
+</body>
+</html>

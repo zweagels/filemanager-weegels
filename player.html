@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TV Weergave - FileManager</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Playfair+Display:ital,wght@0,700;1,700&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/public/css/views/slideshow-player.css">
+</head>
+<body class="ss-tv-body">
+
+    <div id="ss-tv-loader" class="ss-tv-loader">
+        <div class="ss-tv-spinner"></div>
+        <div id="ss-tv-status" class="ss-tv-status">Presentatie voorbereiden...</div>
+    </div>
+
+    <div id="ss-tv-error" class="ss-tv-error" style="display: none;">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--error, #ef4444)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        <h1 id="ss-tv-error-title">Fout bij laden</h1>
+        <p id="ss-tv-error-desc">Kan de presentatie niet ophalen of de link is ongeldig.</p>
+        <button onclick="window.location.reload()" class="ss-tv-retry-btn">Probeer opnieuw</button>
+    </div>
+
+    <div id="ss-tv-container" class="ss-tv-container" style="opacity: 0;">
+        
+        <div id="ss-tv-bg" class="ss-tv-bg"></div>
+        
+        <div id="ss-tv-media-layer" class="ss-tv-media-layer"></div>
+
+        <div id="ss-tv-overlay" class="ss-tv-overlay">
+            
+            <div id="ss-tv-watermark" class="ss-tv-watermark"></div>
+            
+            <div id="ss-tv-clock" class="ss-tv-clock">
+                <span id="ss-tv-time">--:--</span>
+                <span id="ss-tv-date" class="ss-tv-date">-- -- ----</span>
+            </div>
+            
+            <div id="ss-tv-radio-widget" class="ss-tv-radio-widget">
+                <img id="ss-tv-radio-logo" class="ss-tv-radio-logo" src="" alt="Radio" onerror="this.style.display='none';">
+                <div class="ss-tv-radio-info">
+                    <div class="ss-tv-radio-title">Nu aan het luisteren</div>
+                    <div class="ss-tv-radio-name" id="ss-tv-radio-name">Laden...</div>
+                </div>
+                <div class="ss-tv-radio-equalizer">
+                    <div></div><div></div><div></div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <div id="ss-tv-progress-container" class="ss-tv-progress-container">
+            <div id="ss-tv-progress-bar" class="ss-tv-progress-bar"></div>
+        </div>
+
+        <div id="ss-tv-interaction-shield" class="ss-tv-interaction-shield"></div>
+        
+        <div id="ss-tv-audio-start" class="ss-tv-audio-start">
+            <button id="btn-start-audio">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                Tik om presentatie te starten
+            </button>
+        </div>
+    </div>
+
+    <audio id="ss-tv-audio" preload="none" style="display:none;"></audio>
+
+<script src="/public/js/app.js"></script>
+<script src="/public/js/core/EventBus.js"></script>
+<script src="/public/js/modules/slideshow/WorkerPreload.js"></script>
+<script src="/public/js/modules/slideshow/PlayerLayouts.js"></script>
+<script src="/public/js/modules/slideshow/PlayerCore.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (!window.App) window.App = {};
+        if (!window.App.workerPreload) window.App.workerPreload = new window.WorkerPreload();
+        if (!window.App.playerCore && document.getElementById('ss-tv-container')) {
+            window.App.playerCore = new window.PlayerCore();
+        }
+    });
+</script>
+</body>
+</html>

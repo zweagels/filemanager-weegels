@@ -1,0 +1,134 @@
+/* PROJECT: FILEMANAGER | V1.1.2 | MODULE: Styles | FILE: public/css/layout/structure.css */
+
+body, html {
+    height: 100%; width: 100%; margin: 0;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    transition: background-color var(--anim-speed);
+}
+
+.noise-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 9999; opacity: 0.03;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXVnbGxrAwMCBAuPAAAAAElFTkSuQmCC');
+}
+
+.app-container {
+    display: grid;
+    grid-template-columns: var(--sidebar-width) 4px 1fr;
+    grid-template-rows: 1fr;
+    height: 100vh; width: 100vw;
+    transition: grid-template-columns 0.3s ease;
+}
+
+.main-content {
+    display: flex; flex-direction: column;
+    height: 100%;
+    background-color: var(--bg-main);
+    position: relative; overflow: hidden;
+    transition: background-color var(--anim-speed);
+}
+
+.sidebar-resizer {
+    background: transparent; cursor: col-resize;
+    transition: background 0.2s; z-index: 100;
+}
+.sidebar-resizer:hover, .sidebar-resizer.resizing { background: var(--primary); }
+
+.file-view-container {
+    flex: 1; padding: 20px; overflow-y: auto;
+    display: block; 
+}
+
+/* --- ZEN MODE --- */
+body.zen-mode .app-container {
+    grid-template-columns: 0px 0px 1fr;
+}
+
+/* FIX: Header klapt nu netjes in plaats van -80px marge */
+body.zen-mode .header {
+    min-height: 0;
+    height: 0;
+    padding: 0;
+    border-bottom: none;
+    overflow: hidden;
+    opacity: 0;
+    margin: 0;
+}
+
+body.zen-mode .sidebar {
+    transform: translateX(-100%);
+}
+
+/* Floating Exit Button */
+.floating-zen-exit {
+    position: fixed;
+    bottom: 30px; right: 30px;
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-dropdown);
+    color: var(--text-main);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    cursor: pointer; z-index: 9999;
+    opacity: 0; pointer-events: none;
+    transform: translateY(20px) scale(0.9);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+body.zen-mode .floating-zen-exit {
+    opacity: 1; pointer-events: auto;
+    transform: translateY(0) scale(1);
+}
+
+.floating-zen-exit:hover {
+    background: var(--primary);
+    color: white;
+    transform: translateY(-5px) scale(1.05);
+    border-color: var(--primary);
+}
+
+/* =========================================================
+   --- FASE 5: MOBIELE OPTIMALISATIES (RESPONSIVE SHELL) --- 
+   ========================================================= */
+   
+@media (max-width: 768px) {
+    .app-container {
+        /* Op mobiel verbergen we de vaste sidebar-kolom volledig uit de grid */
+        grid-template-columns: 0px 0px 1fr;
+    }
+    
+    .sidebar-resizer {
+        display: none !important; /* Geen sleepbalk op aanraakschermen */
+    }
+    
+    .file-view-container {
+        padding: 12px; /* Iets krappere padding voor meer schermruimte op mobiel */
+    }
+}
+
+/* De donkere waas achter het mobiele uitklapmenu */
+.mobile-sidebar-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    z-index: 80;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+/* Wordt door JavaScript (straks) geactiveerd */
+body.mobile-menu-open .mobile-sidebar-overlay {
+    opacity: 1;
+    visibility: visible;
+}
+
+body.mobile-menu-open {
+    overflow: hidden; /* Voorkomt dat de achtergrond scrolt als het menu open is */
+}
